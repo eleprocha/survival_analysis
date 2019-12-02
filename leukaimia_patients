@@ -38,11 +38,24 @@ mask1=(df['Treatment']==1) & (df['status']==1)
 plt.figure()
 df.groupby(['Treatment','status'])['t'].plot()
 
-#statistical measures for distributions
+#Normality tests
 from scipy import stats
+def normal(col):
+    statistic,p_value=stats.kstest(col,'norm')
+    print('Statistics :{0}, p_value:{1}'.format(statistic,p_value))
+    if p_value < 0.05:
+        return  print('The distribution differs from normal')
+    else:
+        return  print('The distribution is normal')
+normal(df[mask1]['t'])
+normal(df[mask]['t'])
 
-print('The group  who received treatment and censored \n Skewness:{0}  Kurtosis:{1}'.format(stats.skew(df[mask]['t']),stats.kurtosis(df[mask]['t'])))
-print('The group  who received treatment and relapsed \n Skewness:{0}  Kurtosis:{1}'.format(stats.skew(df[mask1]['t']),stats.kurtosis(df[mask1]['t'])))
+def skew_kurt(col):
+    return print('The group  who received treatment and censored \n Skewness:{0} Kurtosis:{1}'.format(stats.skew(col),stats.kurtosis(col)))
+
+skew_kurt(df[mask]['t'])
+skew_kurt(df[mask1]['t'])
+
 
 
 
