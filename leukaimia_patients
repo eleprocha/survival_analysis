@@ -31,6 +31,18 @@ g=sns.FacetGrid(df,row="Treatment",col="status")
 g.map(plt.hist,'status')
 v=sns.FacetGrid(df,row='status',col='Treatment')
 v.map(plt.hist,'t')
+df.groupby('Treatment')['t'].plot()
+
+mask=(df['Treatment']==1) & (df['status']==0)
+mask1=(df['Treatment']==1) & (df['status']==1)
+plt.figure()
+df.groupby(['Treatment','status'])['t'].plot()
+
+#statistical measures for distributions
+from scipy import stats
+
+print('The group  who received treatment and censored \n Skewness:{0}  Kurtosis:{1}'.format(stats.skew(df[mask]['t']),stats.kurtosis(df[mask]['t'])))
+print('The group  who received treatment and relapsed \n Skewness:{0}  Kurtosis:{1}'.format(stats.skew(df[mask1]['t']),stats.kurtosis(df[mask1]['t'])))
 
 
 
