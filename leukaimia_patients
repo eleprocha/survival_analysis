@@ -56,6 +56,28 @@ def skew_kurt(col):
 skew_kurt(df[mask]['t'])
 skew_kurt(df[mask1]['t'])
 
+#Describe measures for survival experience
+print('the average survival time for group 1, of those who received treatment \n T1:{}'.format(df[df['Treatment']==1]['t'].mean()))
+print('the average survival time for group 2, of those who received placebo \n T2:{}'.format( df[df['Treatment']==0]['t'].mean()))
 
+#KM curve
+from lifelines import KaplanMeierFitter
+group1=df[df['Treatment']==1]
+group2=df[df['Treatment']==0]
+T=group1['t']
+E=group1['status']
+T1=group2['t']
+E1=group2['status']
+
+kmf = KaplanMeierFitter()
+
+ax = plt.subplot(111)
+ax = kmf.fit(T, E, label="Group 1-Treatment").plot(ax=ax)
+ax = kmf.fit(T1, E1, label="Group 2 - Placebo").plot(ax=ax)
+
+#logrank_test
+from lifelines.statistics import logrank_test
+results=logrank_test(T,T1,event_observed_A=E, event_observed_B=E1)
+results.print_summary()
 
 
